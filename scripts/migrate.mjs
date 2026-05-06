@@ -14,9 +14,20 @@ async function loadCards() {
 	const raw = await readFile(join(SRC, "cards-data.jsx"), "utf8");
 	const start = raw.indexOf("window.CARDS");
 	const arrayStart = raw.indexOf("[", start);
+	// Bracket-walk to find the matching close — anything after (e.g. the
+	// `window.CARDS.forEach(...)` trailer) references `window`, which doesn't
+	// exist in Node, so we drop it.
+	let depth = 0, i = arrayStart;
+	for (; i < raw.length; i++) {
+		const c = raw[i];
+		if (c === "[") depth++;
+		else if (c === "]") { depth--; if (depth === 0) { i++; break; } }
+	}
+	const arrayLiteral = raw.slice(arrayStart, i);
+	const preamble = raw.slice(0, start);
 	const transformed =
-		`const CARDS = ` + raw.slice(arrayStart) +
-		`\nexport default CARDS;`;
+		preamble +
+		`const CARDS = ${arrayLiteral};\nexport default CARDS;`;
 	const tmpFile = join(TMP, "cards.mjs");
 	await writeFile(tmpFile, transformed);
 	const mod = await import(tmpFile + "?t=" + Date.now());
