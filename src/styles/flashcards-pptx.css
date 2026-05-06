@@ -46,15 +46,15 @@ html,body{margin:0;padding:0;background:#0c0a08;font-family:"Schibsted Grotesk",
 .guide-table.en{font-family:"Schibsted Grotesk",sans-serif;font-size:32px}
 .right.dense .body-zh,.right.dense .body-en{font-size:21px;line-height:1.55}
 .right.dense .body-zh+.body-zh,.right.dense .body-en+.body-en{margin-top:8px}
-.slide.guide-G1 .right{justify-content:flex-start;gap:14px;padding-top:95px}
+.slide.guide-G1 .right{justify-content:flex-start;gap:14px;display:flex;flex-direction:column;padding-top:95px}
 .slide.guide-G1 .body-zh{font-size:34px;line-height:1.55}
 .slide.guide-G1 .body-en{font-size:32px;line-height:1.45}
 .slide.guide-G1 .body-zh+.body-zh,.slide.guide-G1 .body-en+.body-en{margin-top:0}
-.slide.guide-G7 .right{justify-content:flex-start;gap:12px;padding-top:95px}
+.slide.guide-G7 .right{justify-content:flex-start;gap:12px;display:flex;flex-direction:column;padding-top:95px}
 .slide.guide-G7 .body-zh{font-size:28px;line-height:1.5}
 .slide.guide-G7 .body-en{font-size:26px;line-height:1.45}
 .slide.guide-G7 .body-zh+.body-zh,.slide.guide-G7 .body-en+.body-en{margin-top:0}
-.slide.guide-G5 .right,.slide.guide-G2 .right,.slide.guide-G4 .right{justify-content:flex-start;gap:14px;padding-top:95px}
+.slide.guide-G5 .right,.slide.guide-G2 .right,.slide.guide-G4 .right{justify-content:flex-start;gap:14px;display:flex;flex-direction:column;padding-top:95px}
 .slide.guide-G5 .body-zh{font-size:24px;line-height:1.5}
 .slide.guide-G5 .body-en{font-size:22px;line-height:1.45}
 .slide.guide-G2 .body-zh{font-size:24px;line-height:1.5}

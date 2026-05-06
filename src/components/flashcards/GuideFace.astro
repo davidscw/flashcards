@@ -15,10 +15,7 @@ const isFront = face === "front";
 const title = isFront ? entry.titleZh : entry.titleEn;
 const pullQuote = isFront ? entry.pullQuoteZh : entry.pullQuoteEn;
 
-const pullQuoteClass = isFront ? "pull-quote" : variant === "pptx" ? "pull-quote en" : "pull-quote";
-const pullQuoteStyle = !isFront && variant === "web"
-	? 'font-family:"Schibsted Grotesk",sans-serif'
-	: undefined;
+const pullQuoteClass = isFront ? "pull-quote" : "pull-quote en";
 ---
 
 {area === "left" ? (
@@ -28,7 +25,7 @@ const pullQuoteStyle = !isFront && variant === "web"
 		) : (
 			<h2 class="title-en">{title}</h2>
 		)}
-		<p class={pullQuoteClass} style={pullQuoteStyle}>{pullQuote}</p>
+		<p class={pullQuoteClass}>{pullQuote}</p>
 	</>
 ) : (
 	<>

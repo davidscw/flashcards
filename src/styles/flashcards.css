@@ -58,6 +58,25 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 }
 .card .bg { position: absolute; inset: 0; background-size: cover; background-position: center; background-repeat: no-repeat; }
 .card .overlay { position: absolute; inset: 0; background: #000; }
+.card .overlay-grad-l {
+	position: absolute; inset: 0;
+	background: linear-gradient(
+		90deg,
+		rgba(0,0,0,.78) 0%,
+		rgba(0,0,0,.62) 38%,
+		rgba(0,0,0,.32) 60%,
+		rgba(0,0,0,.18) 100%
+	);
+}
+.card.part-blossoming .overlay-grad-l {
+	background: linear-gradient(
+		90deg,
+		rgba(0,0,0,.55) 0%,
+		rgba(0,0,0,.4) 38%,
+		rgba(0,0,0,.18) 60%,
+		rgba(0,0,0,0) 100%
+	);
+}
 
 .content {
 	position: absolute;
@@ -74,7 +93,7 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 
 .essay, .back-en {
 	height: 100%;
-	display: grid; grid-template-columns: minmax(180px, 38%) 1fr; gap: 28px;
+	display: grid; grid-template-columns: minmax(180px, 32%) 1fr; gap: 28px;
 }
 .essay .left, .back-en .left {
 	display: flex; flex-direction: column; justify-content: space-between;
@@ -82,17 +101,20 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 }
 .essay .right, .back-en .right { display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
 .essay .left > div:first-child, .back-en .left > div:first-child { display: flex; flex-direction: column; }
-.essay .left .eyebrow-row, .back-en .left .eyebrow-row { margin-bottom: 24px; }
+.essay .left .eyebrow-row, .back-en .left .eyebrow-row { margin-bottom: 12px; }
 
-.eyebrow-row { display: flex; justify-content: space-between; align-items: center; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.7); }
-.eyebrow-row .num { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; font-weight: 500; letter-spacing: .18em; color: rgba(255,255,255,.95); }
-.eyebrow-row .num .of { color: rgba(255,255,255,.5); font-weight: 400; }
+.eyebrow-row { display: flex; justify-content: flex-start; align-items: center; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.7); }
 .theme-tag { display: inline-flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.9); }
 .theme-tag::before { content: ""; width: 5px; height: 5px; background: #fff; border-radius: 50%; }
+
+.big-num { display: block; margin: 0 0 12px; font-feature-settings: "tnum","lnum"; }
+.big-num b { font-family: "Noto Serif TC", serif; color: #fff; font-weight: 400; font-size: 52px; line-height: .9; letter-spacing: -0.03em; display: block; }
+.big-num .of { display: none; }
 
 .title-zh { font-family: "Noto Serif TC", serif; font-weight: 700; font-size: 36px; line-height: 1.18; letter-spacing: .02em; color: #fff; margin: 0 0 20px; text-wrap: balance; text-shadow: 0 1px 3px rgba(0,0,0,.35); white-space: pre-line; }
 .title-en { font-family: "Schibsted Grotesk", sans-serif; font-weight: 600; font-size: 30px; line-height: 1.08; letter-spacing: -0.02em; color: #fff; margin: 0 0 20px; text-wrap: balance; text-shadow: 0 1px 3px rgba(0,0,0,.35); }
 .pull-quote { margin-top: 0; font-family: "Noto Serif TC", serif; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,.9); font-weight: 400; border-left: 2px solid rgba(255,255,255,.45); padding-left: 14px; max-width: 240px; }
+.pull-quote.en { font-family: "Schibsted Grotesk", sans-serif; font-weight: 400; }
 
 .credit-line { margin-top: auto; padding-top: 16px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.7); white-space: nowrap; }
 
@@ -106,6 +128,48 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 .right.dense .body-zh, .right.dense .body-en { font-size: 12.5px; line-height: 1.55; }
 .right.dense .body-zh + .body-zh, .right.dense .body-en + .body-en { margin-top: 4px; }
 
+.card.guide-G1 .right .body-zh { font-size: 14.5px; line-height: 1.62; }
+.card.guide-G1 .right .body-zh + .body-zh { margin-top: 6px; }
+.card.guide-G1 .right .body-en { font-size: 14px; line-height: 1.55; }
+.card.guide-G1 .right .body-en + .body-en { margin-top: 6px; }
+.card.guide-G1 .g1-c1 { display: inline-block; width: 110px; }
+.card.guide-G1 .g1-c2 { display: inline-block; width: 56px; }
+.card.guide-G1 .g1-h { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.75); font-weight: 500; }
+
+.card.guide-G2 .lang-zh .right { gap: 0; }
+.card.guide-G2 .lang-zh .right .body-zh { font-size: 11px; line-height: 1.4; }
+.card.guide-G2 .lang-zh .right .body-zh + .body-zh { margin-top: 6px; }
+.card.guide-G2 .lang-en .right .body-en { font-size: 13.5px; line-height: 1.5; }
+.card.guide-G2 .lang-en .right .body-en + .body-en { margin-top: 5px; }
+
+.card.guide-G3 .lang-zh .right .guide-table { font-size: 14px; line-height: 1.42; }
+.card.guide-G3 .lang-zh .right .guide-table thead th { padding: 4px 8px 6px; font-size: 13px; font-family: "Noto Sans TC", sans-serif; letter-spacing: .04em; text-transform: none; }
+.card.guide-G3 .lang-zh .right .guide-table td { padding: 4px 8px; }
+.card.guide-G3 .lang-en .right .guide-table { font-size: 12px; line-height: 1.4; }
+.card.guide-G3 .lang-en .right .guide-table thead th { padding: 4px 8px 6px; font-size: 10px; }
+.card.guide-G3 .lang-en .right .guide-table td { padding: 4px 8px; }
+.card.guide-G3 .lang-en .right .guide-table.guide-table-en { font-size: 10.5px; line-height: 1.38; }
+
+.card.guide-G4 .lang-zh .right .body-zh { font-size: 13.5px; line-height: 1.55; }
+.card.guide-G4 .lang-zh .right .body-zh + .body-zh { margin-top: 5px; }
+
+.card.guide-G5 .lang-zh .right .body-zh { font-size: 13px; line-height: 1.5; }
+.card.guide-G5 .lang-zh .right .body-zh + .body-zh { margin-top: 6px; }
+.card.guide-G5 .lang-en .right .body-en { font-size: 14.5px; line-height: 1.5; }
+.card.guide-G5 .lang-en .right .body-en + .body-en { margin-top: 6px; }
+
+.card.guide-G6 .lang-zh .right .guide-table thead th { font-size: 13px; font-family: "Noto Sans TC", sans-serif; letter-spacing: .04em; text-transform: none; }
+.card.guide-G6 .lang-en .right .guide-table { font-size: 11px; line-height: 1.42; }
+.card.guide-G6 .lang-en .right .guide-table thead th { padding: 4px 8px 6px; font-size: 10px; }
+.card.guide-G6 .lang-en .right .guide-table td { padding: 4px 8px; }
+
+.card.guide-G7 .lang-zh .right { gap: 6px; }
+.card.guide-G7 .lang-zh .right .body-zh { font-size: 15px; line-height: 1.55; }
+.card.guide-G7 .lang-zh .right .body-zh + .body-zh { margin-top: 4px; }
+.card.guide-G7 .lang-en .right { gap: 5px; }
+.card.guide-G7 .lang-en .right .body-en { font-size: 12px; line-height: 1.5; }
+.card.guide-G7 .lang-en .right .body-en + .body-en { margin-top: 4px; }
+
 .guide-table { width: 100%; border-collapse: collapse; color: rgba(255,255,255,.95); font-family: "Noto Sans TC", sans-serif; font-size: 13.5px; line-height: 1.5; }
 .guide-table thead th { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; font-weight: 600; color: rgba(255,255,255,.85); text-align: left; padding: 6px 10px 8px; border-bottom: 1px solid rgba(255,255,255,.32); }
 .guide-table td { padding: 7px 10px; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,.14); }
@@ -118,8 +182,8 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 .practice { display: grid; grid-template-columns: auto 1fr; gap: 10px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.18); border-radius: 8px; padding: 9px 12px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .practice .label { font-family: "Noto Sans TC", sans-serif; font-size: 14px; font-weight: 600; letter-spacing: .08em; color: #fff; white-space: nowrap; padding-top: 1px; border-right: 1px solid rgba(255,255,255,.25); padding-right: 10px; }
 .practice .text { font-family: "Noto Sans TC", sans-serif; font-size: 15px; line-height: 1.65; color: rgba(255,255,255,.95); font-weight: 400; }
-.practice-en .label { font-family: "Schibsted Grotesk", sans-serif; text-transform: uppercase; letter-spacing: .12em; font-size: 14px; }
-.practice-en .text { font-family: "Schibsted Grotesk", sans-serif; font-size: 15px; line-height: 1.55; }
+.practice.en .label { font-family: "Schibsted Grotesk", sans-serif; text-transform: uppercase; letter-spacing: .12em; font-size: 14px; }
+.practice.en .text { font-family: "Schibsted Grotesk", sans-serif; font-size: 15px; line-height: 1.55; }
 
 @media print {
 	@page { size: 8.25in 5.25in; margin: 0; }

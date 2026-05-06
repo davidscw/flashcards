@@ -31,12 +31,9 @@ const pullQuote =
 const body = isFront ? card.bodyZh : card.bodyEn;
 const practiceLabelClass = isFront ? "label" : "label";
 const practiceTextClass = isFront ? "text" : "text";
-const pullQuoteClass = isFront ? "pull-quote" : variant === "pptx" ? "pull-quote en" : "pull-quote";
+const pullQuoteClass = isFront ? "pull-quote" : "pull-quote en";
 const bodyClass = isFront ? "body-zh" : "body-en";
-const practiceClass = isFront ? "practice" : variant === "pptx" ? "practice en" : "practice practice-en";
-const pullQuoteStyle = !isFront && variant === "web"
-	? 'font-family:"Schibsted Grotesk",sans-serif'
-	: undefined;
+const practiceClass = isFront ? "practice" : "practice en";
 ---
 
 {area === "left" ? (
@@ -46,7 +43,7 @@ const pullQuoteStyle = !isFront && variant === "web"
 		) : (
 			<h2 class="title-en">{title}</h2>
 		)}
-		<p class={pullQuoteClass} style={pullQuoteStyle}>{pullQuote}</p>
+		<p class={pullQuoteClass}>{pullQuote}</p>
 	</>
 ) : (
 	<>
