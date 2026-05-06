@@ -1,5 +1,4 @@
-// Place any global data in this file.
-// You can import this data from anywhere in your site by using the `import` keyword.
-
-export const SITE_TITLE = "Astro Blog";
-export const SITE_DESCRIPTION = "Welcome to my website!";
+export const SITE_TITLE_ZH = "身體智慧";
+export const SITE_TITLE_EN = "Body Wisdom · Dr Peggy";
+export const SITE_TITLE = `${SITE_TITLE_ZH} · ${SITE_TITLE_EN}`;
+export const SITE_DESCRIPTION = "Body Wisdom Cards by Dr Peggy — 64 bilingual flashcards plus an 8-part companion guide.";

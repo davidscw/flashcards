@@ -1,27 +1,29 @@
-const root = document.documentElement;
-const button = document.querySelector<HTMLButtonElement>("[data-lang-toggle]");
+type Lang = "zh" | "en";
 
-function labelFor(lang: string): string {
-	return lang === "en" ? "繁體中文" : "English";
+const root = document.documentElement;
+
+function currentLang(): Lang {
+	return root.getAttribute("data-lang") === "en" ? "en" : "zh";
 }
 
-function apply(lang: "zh" | "en") {
+function applyLang(lang: Lang) {
 	root.setAttribute("data-lang", lang);
-	if (button) {
-		button.textContent = labelFor(lang);
-		button.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
-	}
+	try {
+		localStorage.setItem("lang", lang);
+	} catch {}
 	const url = new URL(location.href);
 	url.searchParams.set("lang", lang);
 	history.replaceState({}, "", url.toString());
+	document.querySelectorAll<HTMLElement>("[data-lang-toggle]").forEach(syncButton);
 }
 
-if (button) {
-	const initial = root.getAttribute("data-lang") === "en" ? "en" : "zh";
-	button.textContent = labelFor(initial);
-	button.setAttribute("aria-pressed", initial === "en" ? "true" : "false");
-	button.addEventListener("click", () => {
-		const next = root.getAttribute("data-lang") === "en" ? "zh" : "en";
-		apply(next);
-	});
+function syncButton(btn: HTMLElement) {
+	const lang = currentLang();
+	btn.setAttribute("aria-pressed", lang === "en" ? "true" : "false");
+	btn.setAttribute("data-lang-current", lang);
 }
+
+document.querySelectorAll<HTMLElement>("[data-lang-toggle]").forEach((btn) => {
+	syncButton(btn);
+	btn.addEventListener("click", () => applyLang(currentLang() === "en" ? "zh" : "en"));
+});

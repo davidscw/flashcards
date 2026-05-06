@@ -1,50 +1,232 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
----
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { PARTS } from "../lib/parts";
 
+const FEATURED_NUMS = [1, 19, 37, 55];
+const cards = await getCollection("cards");
+const featured = FEATURED_NUMS
+	.map((n) => cards.find((c) => c.data.num === n))
+	.filter((c): c is NonNullable<typeof c> => c !== undefined)
+	.map((c) => ({
+		card: c.data,
+		part: PARTS.find((p) => c.data.num >= p.range[0] && c.data.num <= p.range[1])!,
+	}));
+---
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+		<main class="home">
+			<section class="hero">
+				<p class="kicker">
+					<span class="i18n-zh">Dr Peggy · 64 張卡片 · 雙語</span>
+					<span class="i18n-en">Dr Peggy · 64 cards · bilingual</span>
+				</p>
+				<h1>
+					<span class="i18n-zh">身體智慧</span>
+					<span class="i18n-en">Body Wisdom</span>
+				</h1>
+				<p class="lede">
+					<span class="i18n-zh">64 張卡片，從根基到傳遞——一份陪你重新傾聽身體的邀請。</span>
+					<span class="i18n-en">64 cards, from foundations to offering — an invitation to listen to your body again.</span>
+				</p>
+			</section>
+
+			<section class="carousel-section" aria-label="Featured cards">
+				<div class="carousel" data-carousel>
+					{featured.map(({ card, part }, i) => (
+						<a class={`carousel-slide part-${part.id}`} href={`/flashcards#card-${card.num}`} data-index={i}>
+							<div class="slide-bg" style={`background-image:url(${part.bgImage})`}></div>
+							<div class="slide-overlay"></div>
+							<div class="slide-content">
+								<div class="slide-eyebrow">{part.roman} · <span class="i18n-zh">{part.nameZh}</span><span class="i18n-en">{part.nameEn}</span></div>
+								<div class="slide-num">{String(card.num).padStart(2, "0")}</div>
+								<div class="slide-concept">
+									<span class="i18n-zh">{card.conceptZh}</span>
+									<span class="i18n-en">{card.conceptEn}</span>
+								</div>
+								<div class="slide-title">
+									<span class="i18n-zh">{card.titleZh}</span>
+									<span class="i18n-en">{card.titleEn}</span>
+								</div>
+							</div>
+						</a>
+					))}
+				</div>
+				<div class="carousel-controls">
+					<button type="button" class="carousel-btn" data-carousel-prev aria-label="Previous">‹</button>
+					<div class="carousel-dots" data-carousel-dots>
+						{featured.map((_, i) => (
+							<button type="button" class="carousel-dot" data-carousel-dot={i} aria-label={`Go to slide ${i + 1}`}></button>
+						))}
+					</div>
+					<button type="button" class="carousel-btn" data-carousel-next aria-label="Next">›</button>
+				</div>
+			</section>
+
+			<section class="cta">
+				<a class="cta-link" href="/flashcards">
+					<span class="i18n-zh">瀏覽全部 64 張卡片 →</span>
+					<span class="i18n-en">Explore all 64 cards →</span>
+				</a>
+			</section>
 		</main>
 		<Footer />
+		<script>
+			import "../scripts/home-carousel";
+		</script>
+		<style>
+			main.home {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 64px 24px 96px;
+			}
+			.hero { text-align: center; margin-bottom: 56px; }
+			.kicker {
+				font-family: var(--font-mono);
+				font-size: 12px;
+				letter-spacing: .22em;
+				text-transform: uppercase;
+				color: var(--ink-dim);
+				margin: 0 0 16px;
+			}
+			.hero h1 {
+				font-family: var(--font-serif-zh);
+				font-size: clamp(48px, 8vw, 96px);
+				font-weight: 600;
+				margin: 0 0 20px;
+				color: var(--ink);
+				letter-spacing: .02em;
+			}
+			.hero h1 .i18n-en { font-family: var(--font-sans); letter-spacing: -0.02em; }
+			.lede {
+				font-size: clamp(16px, 1.6vw, 20px);
+				color: var(--ink-muted);
+				max-width: 640px;
+				margin: 0 auto;
+				line-height: 1.5;
+			}
+			.lede .i18n-zh { font-family: var(--font-serif-zh); }
+
+			.carousel {
+				display: flex; gap: 24px;
+				overflow-x: auto;
+				scroll-snap-type: x mandatory;
+				scroll-behavior: smooth;
+				padding: 8px 4px;
+				scrollbar-width: none;
+			}
+			.carousel::-webkit-scrollbar { display: none; }
+			.carousel-slide {
+				position: relative;
+				flex: 0 0 100%;
+				scroll-snap-align: center;
+				aspect-ratio: 16 / 10;
+				border-radius: var(--r-lg);
+				overflow: hidden;
+				color: #fff;
+				text-decoration: none;
+				display: block;
+			}
+			@media (min-width: 720px) { .carousel-slide { flex: 0 0 calc(50% - 12px); } }
+			@media (min-width: 1080px) { .carousel-slide { flex: 0 0 calc(33.333% - 16px); } }
+			.slide-bg {
+				position: absolute; inset: 0;
+				background-size: cover; background-position: center;
+				transform: scale(1.02);
+				transition: transform .6s ease;
+			}
+			.carousel-slide:hover .slide-bg { transform: scale(1.06); }
+			.slide-overlay {
+				position: absolute; inset: 0;
+				background: linear-gradient(180deg, rgba(0,0,0,.05) 0%, rgba(0,0,0,.35) 50%, rgba(0,0,0,.85) 100%);
+			}
+			.slide-content {
+				position: absolute; inset: 0;
+				padding: 28px;
+				display: flex; flex-direction: column;
+				justify-content: flex-end;
+				gap: 8px;
+			}
+			.slide-eyebrow {
+				font-family: var(--font-mono);
+				font-size: 11px;
+				letter-spacing: .22em;
+				text-transform: uppercase;
+				color: rgba(255,255,255,.85);
+			}
+			.slide-num {
+				font-family: var(--font-serif-zh);
+				font-size: 56px;
+				line-height: .9;
+				color: rgba(255,255,255,.95);
+			}
+			.slide-concept {
+				font-size: 14px;
+				font-family: var(--font-mono);
+				letter-spacing: .12em;
+				text-transform: uppercase;
+				color: rgba(255,255,255,.85);
+				margin-top: 4px;
+			}
+			.slide-title {
+				font-size: clamp(20px, 1.8vw, 26px);
+				font-weight: 600;
+				line-height: 1.25;
+				color: #fff;
+			}
+			.slide-title .i18n-zh { font-family: var(--font-serif-zh); }
+
+			.carousel-controls {
+				display: flex; align-items: center; justify-content: center;
+				gap: 24px; margin-top: 28px;
+			}
+			.carousel-btn {
+				width: 40px; height: 40px;
+				border-radius: var(--r-pill);
+				background: transparent;
+				border: 1px solid var(--line-strong);
+				color: var(--ink-muted);
+				font-size: 22px;
+				cursor: pointer;
+				display: flex; align-items: center; justify-content: center;
+				transition: border-color var(--t-fast), color var(--t-fast);
+			}
+			.carousel-btn:hover { border-color: var(--line-active); color: var(--ink); }
+			.carousel-dots { display: flex; gap: 10px; align-items: center; }
+			.carousel-dot {
+				width: 8px; height: 8px;
+				border-radius: var(--r-pill);
+				background: var(--line-strong);
+				border: 0;
+				cursor: pointer;
+				padding: 0;
+				transition: background var(--t-fast), transform var(--t-fast);
+			}
+			.carousel-dot[data-active="true"] { background: var(--accent); transform: scale(1.4); }
+
+			.cta { text-align: center; margin-top: 64px; }
+			.cta-link {
+				font-family: var(--font-mono);
+				font-size: 13px;
+				letter-spacing: .18em;
+				text-transform: uppercase;
+				color: var(--ink-muted);
+				border: 1px solid var(--line-strong);
+				border-radius: var(--r-pill);
+				padding: 14px 28px;
+				text-decoration: none;
+				display: inline-block;
+				transition: border-color var(--t-fast), color var(--t-fast);
+			}
+			.cta-link:hover { border-color: var(--line-active); color: var(--ink); }
+		</style>
 	</body>
 </html>

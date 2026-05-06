@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
 import FlashcardsShell from "../components/FlashcardsShell.astro";
 import PartDivider from "../components/PartDivider.astro";
 import Card from "../components/Card.astro";
@@ -23,11 +24,9 @@ const parts = PARTS.map((part) => {
 <html lang="zh-Hant">
 	<head>
 		<BaseHead title="Flashcards · 身體智慧" description="Body Wisdom Cards by Dr Peggy — 64 bilingual flashcards plus an 8-part companion guide." />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 	</head>
 	<body class="flashcards-page">
+		<Header />
 		<FlashcardsShell>
 			{parts.map(({ part, partCards, rangeLabel }) => (
 				<Fragment>
