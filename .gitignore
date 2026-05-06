@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,node,git
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,node,git
 
+# Claude Code local state
+.claude/
+
 ### Git ###
 # Created by git for backups. To disable backups in Git:
 # $ git config --global mergetool.keepBackup false
