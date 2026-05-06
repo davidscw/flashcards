@@ -2,17 +2,6 @@ import { glob } from "astro/loaders";
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 
-const blog = defineCollection({
-	loader: glob({ base: "./src/content/blog", pattern: "**/*.{md,mdx}" }),
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
-	}),
-});
-
 const practice = z.object({
 	labelZh: z.string(),
 	textZh: z.string(),
@@ -72,4 +61,4 @@ const guide = defineCollection({
 	schema: z.discriminatedUnion("kind", [guideProse, guideListDense, guideTable]),
 });
 
-export const collections = { blog, cards, guide };
+export const collections = { cards, guide };
