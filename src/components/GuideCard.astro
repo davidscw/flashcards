@@ -1,0 +1,78 @@
+---
+import { GUIDE_PART } from "../lib/parts";
+import type { CollectionEntry } from "astro:content";
+
+type Props = { entry: CollectionEntry<"guide">; total: number };
+const { entry, total } = Astro.props;
+const data = entry.data;
+const numStr = data.num.replace(/^G/i, "");
+const tagZh = GUIDE_PART.nameZh;
+const tagEn = GUIDE_PART.nameEn;
+const denseClass = data.kind === "list-dense" ? " dense" : "";
+---
+<article class="card-wrap" data-guide-num={data.num}>
+	<div class="card">
+		<div class="bg" style={`background-image:url(${GUIDE_PART.bgImage})`}></div>
+		<div class="overlay" style={`opacity:${GUIDE_PART.overlay / 100}`}></div>
+
+		<div class="content lang-zh">
+			<div class="essay">
+				<div class="left">
+					<div>
+						<div class="eyebrow-row">
+							<span class="theme-tag">{tagZh}</span>
+							<span class="num"><b>{numStr}</b><span class="of">/{total}</span></span>
+						</div>
+						<h2 class="title-zh">{data.titleZh}</h2>
+						<p class="pull-quote">{data.pullQuoteZh}</p>
+					</div>
+					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
+				</div>
+				<div class={"right" + denseClass}>
+					{data.kind === "table" ? (
+						<table class="guide-table">
+							<thead><tr>{data.headerZh.map((h) => <th>{h}</th>)}</tr></thead>
+							<tbody>
+								{data.rowsZh.map((row) => (
+									<tr><td class="col-key">{row[0]}</td><td class="col-val">{row[1]}</td></tr>
+								))}
+							</tbody>
+						</table>
+					) : (
+						data.bodyZh.map((p) => <p class="body-zh" set:html={p} />)
+					)}
+				</div>
+			</div>
+		</div>
+
+		<div class="content lang-en">
+			<div class="back-en">
+				<div class="left">
+					<div>
+						<div class="eyebrow-row">
+							<span class="theme-tag">{tagEn}</span>
+							<span class="num"><b>{numStr}</b><span class="of">/{total}</span></span>
+						</div>
+						<h2 class="title-en">{data.titleEn}</h2>
+						<p class="pull-quote" style='font-family:"Schibsted Grotesk",sans-serif'>{data.pullQuoteEn}</p>
+					</div>
+					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
+				</div>
+				<div class={"right" + denseClass}>
+					{data.kind === "table" ? (
+						<table class="guide-table guide-table-en">
+							<thead><tr>{data.headerEn.map((h) => <th>{h}</th>)}</tr></thead>
+							<tbody>
+								{data.rowsEn.map((row) => (
+									<tr><td class="col-key">{row[0]}</td><td class="col-val">{row[1]}</td></tr>
+								))}
+							</tbody>
+						</table>
+					) : (
+						data.bodyEn.map((p) => <p class="body-en" set:html={p} />)
+					)}
+				</div>
+			</div>
+		</div>
+	</div>
+</article>

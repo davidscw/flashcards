@@ -1,0 +1,17 @@
+---
+type Props = {
+	roman: string;
+	nameEn: string;
+	nameZh: string;
+	subEn: string;
+	subZh: string;
+	rangeLabel: string;
+};
+const { roman, nameEn, nameZh, subEn, subZh, rangeLabel } = Astro.props;
+---
+<div class="part-divider">
+	<span class="roman">{roman}</span>
+	<span class="name">{nameEn}</span>
+	<span class="name-zh">{nameZh}</span>
+	<span class="sub">{subEn} · {subZh} · {rangeLabel}</span>
+</div>

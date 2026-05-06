@@ -1,0 +1,72 @@
+---
+import { partFor } from "../lib/parts";
+import type { CollectionEntry } from "astro:content";
+
+type Props = { entry: CollectionEntry<"cards"> };
+const { entry } = Astro.props;
+const data = entry.data;
+const part = partFor(data.num);
+const numStr = String(data.num).padStart(2, "0");
+const tagZh = `${part.roman} · ${part.nameZh}`;
+const tagEn = `${part.roman} · ${part.nameEn}`;
+---
+<article class="card-wrap" data-card-num={data.num}>
+	<div class="card">
+		<div class="bg" style={`background-image:url(${part.bgImage})`}></div>
+		<div class="overlay" style={`opacity:${part.overlay / 100}`}></div>
+
+		<div class="content lang-zh">
+			<div class="essay">
+				<div class="left">
+					<div>
+						<div class="eyebrow-row">
+							<span class="theme-tag">{tagZh}</span>
+							<span class="num"><b>{numStr}</b><span class="of">/64</span></span>
+						</div>
+						<h2 class="title-zh">{data.titleZh}</h2>
+						<p class="pull-quote">{data.pullQuoteZh}</p>
+					</div>
+					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
+				</div>
+				<div class="right">
+					{data.bodyZh.map((p) => <p class="body-zh" set:html={p} />)}
+					<div class="practice-stack">
+						{data.practices.map((pr) => (
+							<div class="practice">
+								<div class="label">{pr.labelZh}</div>
+								<div class="text">{pr.textZh}</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="content lang-en">
+			<div class="back-en">
+				<div class="left">
+					<div>
+						<div class="eyebrow-row">
+							<span class="theme-tag">{tagEn}</span>
+							<span class="num"><b>{numStr}</b><span class="of">/64</span></span>
+						</div>
+						<h2 class="title-en">{data.titleEn}</h2>
+						<p class="pull-quote" style='font-family:"Schibsted Grotesk",sans-serif'>{data.pullQuoteEn}</p>
+					</div>
+					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
+				</div>
+				<div class="right">
+					{data.bodyEn.map((p) => <p class="body-en" set:html={p} />)}
+					<div class="practice-stack">
+						{data.practices.map((pr) => (
+							<div class="practice practice-en">
+								<div class="label">{pr.labelEn}</div>
+								<div class="text">{pr.textEn}</div>
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</article>
