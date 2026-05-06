@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type GuideData = CollectionEntry<"guide">["data"];
+
+type Props = {
+	entry: GuideData;
+	face: "front" | "back";
+	area: "left" | "right";
+	variant: "web" | "pptx";
+};
+
+const { entry, face, area, variant } = Astro.props;
+const isFront = face === "front";
+const title = isFront ? entry.titleZh : entry.titleEn;
+const pullQuote = isFront ? entry.pullQuoteZh : entry.pullQuoteEn;
+
+const pullQuoteClass = isFront ? "pull-quote" : variant === "pptx" ? "pull-quote en" : "pull-quote";
+const pullQuoteStyle = !isFront && variant === "web"
+	? 'font-family:"Schibsted Grotesk",sans-serif'
+	: undefined;
+---
+
+{area === "left" ? (
+	<>
+		{isFront ? (
+			<h2 class="title-zh">{title}</h2>
+		) : (
+			<h2 class="title-en">{title}</h2>
+		)}
+		<p class={pullQuoteClass} style={pullQuoteStyle}>{pullQuote}</p>
+	</>
+) : (
+	<>
+		{entry.kind === "table" ? (
+			<table
+				class={
+					variant === "web"
+						? (isFront ? "guide-table" : "guide-table guide-table-en")
+						: (isFront ? "guide-table" : "guide-table en")
+				}
+			>
+				<thead>
+					<tr>{(isFront ? entry.headerZh : entry.headerEn).map((h) => <th>{h}</th>)}</tr>
+				</thead>
+				<tbody>
+					{(isFront ? entry.rowsZh : entry.rowsEn).map((r) => (
+						<tr><td class="col-key">{r[0]}</td><td class={variant === "web" ? "col-val" : undefined}>{r[1]}</td></tr>
+					))}
+				</tbody>
+			</table>
+		) : (
+			(isFront ? entry.bodyZh : entry.bodyEn).map((p) => (
+				<p class={isFront ? "body-zh" : "body-en"} set:html={p} />
+			))
+		)}
+	</>
+)}
+

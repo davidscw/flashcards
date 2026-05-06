@@ -1,6 +1,7 @@
 ---
 import { partFor } from "../lib/parts";
 import type { CollectionEntry } from "astro:content";
+import CardFace from "./flashcards/CardFace.astro";
 
 type Props = { entry: CollectionEntry<"cards"> };
 const { entry } = Astro.props;
@@ -23,21 +24,12 @@ const tagEn = `${part.roman} · ${part.nameEn}`;
 							<span class="theme-tag">{tagZh}</span>
 							<span class="num"><b>{numStr}</b><span class="of">/64</span></span>
 						</div>
-						<h2 class="title-zh">{data.titleZh}</h2>
-						<p class="pull-quote">{data.pullQuoteZh}</p>
+						<CardFace card={data} face="front" area="left" variant="web" />
 					</div>
 					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
 				</div>
 				<div class="right">
-					{data.bodyZh.map((p) => <p class="body-zh" set:html={p} />)}
-					<div class="practice-stack">
-						{data.practices.map((pr) => (
-							<div class="practice">
-								<div class="label">{pr.labelZh}</div>
-								<div class="text">{pr.textZh}</div>
-							</div>
-						))}
-					</div>
+					<CardFace card={data} face="front" area="right" variant="web" />
 				</div>
 			</div>
 		</div>
@@ -50,21 +42,12 @@ const tagEn = `${part.roman} · ${part.nameEn}`;
 							<span class="theme-tag">{tagEn}</span>
 							<span class="num"><b>{numStr}</b><span class="of">/64</span></span>
 						</div>
-						<h2 class="title-en">{data.titleEn}</h2>
-						<p class="pull-quote" style='font-family:"Schibsted Grotesk",sans-serif'>{data.pullQuoteEn}</p>
+						<CardFace card={data} face="back" area="left" variant="web" />
 					</div>
 					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
 				</div>
 				<div class="right">
-					{data.bodyEn.map((p) => <p class="body-en" set:html={p} />)}
-					<div class="practice-stack">
-						{data.practices.map((pr) => (
-							<div class="practice practice-en">
-								<div class="label">{pr.labelEn}</div>
-								<div class="text">{pr.textEn}</div>
-							</div>
-						))}
-					</div>
+					<CardFace card={data} face="back" area="right" variant="web" />
 				</div>
 			</div>
 		</div>

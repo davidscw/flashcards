@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type CardData = CollectionEntry<"cards">["data"];
+
+type Props = {
+	card: CardData;
+	face: "front" | "back";
+	area: "left" | "right";
+	variant: "web" | "pptx";
+	titleOverride?: string;
+	pullQuoteOverride?: string;
+};
+
+const {
+	card,
+	face,
+	area,
+	variant,
+	titleOverride,
+	pullQuoteOverride,
+} = Astro.props;
+
+const isFront = face === "front";
+const title =
+	titleOverride ??
+	(isFront ? card.titleZh : card.titleEn);
+const pullQuote =
+	pullQuoteOverride ??
+	(isFront ? card.pullQuoteZh : card.pullQuoteEn);
+const body = isFront ? card.bodyZh : card.bodyEn;
+const practiceLabelClass = isFront ? "label" : "label";
+const practiceTextClass = isFront ? "text" : "text";
+const pullQuoteClass = isFront ? "pull-quote" : variant === "pptx" ? "pull-quote en" : "pull-quote";
+const bodyClass = isFront ? "body-zh" : "body-en";
+const practiceClass = isFront ? "practice" : variant === "pptx" ? "practice en" : "practice practice-en";
+const pullQuoteStyle = !isFront && variant === "web"
+	? 'font-family:"Schibsted Grotesk",sans-serif'
+	: undefined;
+---
+
+{area === "left" ? (
+	<>
+		{isFront ? (
+			<h2 class="title-zh">{title}</h2>
+		) : (
+			<h2 class="title-en">{title}</h2>
+		)}
+		<p class={pullQuoteClass} style={pullQuoteStyle}>{pullQuote}</p>
+	</>
+) : (
+	<>
+		{body.map((p) => <p class={bodyClass} set:html={p} />)}
+		<div class="practice-stack">
+			{card.practices.map((pr) => (
+				<div class={practiceClass}>
+					<div class={practiceLabelClass}>{isFront ? pr.labelZh : pr.labelEn}</div>
+					<div class={practiceTextClass}>{isFront ? pr.textZh : pr.textEn}</div>
+				</div>
+			))}
+		</div>
+	</>
+)}
+
