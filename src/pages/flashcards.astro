@@ -1,0 +1,57 @@
+---
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import FlashcardsShell from "../components/FlashcardsShell.astro";
+import PartDivider from "../components/PartDivider.astro";
+import Card from "../components/Card.astro";
+import GuideCard from "../components/GuideCard.astro";
+import { PARTS, GUIDE_PART } from "../lib/parts";
+
+const cards = (await getCollection("cards")).sort((a, b) => a.data.num - b.data.num);
+const guide = (await getCollection("guide")).sort((a, b) =>
+	parseInt(a.data.num.slice(1), 10) - parseInt(b.data.num.slice(1), 10)
+);
+const guideTotal = guide.length;
+
+const parts = PARTS.map((part) => {
+	const partCards = cards.filter((c) => c.data.num >= part.range[0] && c.data.num <= part.range[1]);
+	const rangeLabel = `cards ${String(part.range[0]).padStart(2, "0")}–${String(part.range[1]).padStart(2, "0")}`;
+	return { part, partCards, rangeLabel };
+});
+---
+<!doctype html>
+<html lang="zh-Hant">
+	<head>
+		<BaseHead title="Flashcards · 身體智慧" description="Body Wisdom Cards by Dr Peggy — 64 bilingual flashcards plus an 8-part companion guide." />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700;900&family=Noto+Sans+TC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+	</head>
+	<body class="flashcards-page">
+		<FlashcardsShell>
+			{parts.map(({ part, partCards, rangeLabel }) => (
+				<Fragment>
+					<PartDivider
+						roman={part.roman}
+						nameEn={part.nameEn}
+						nameZh={part.nameZh}
+						subEn={part.subEn}
+						subZh={part.subZh}
+						rangeLabel={rangeLabel}
+					/>
+					{partCards.map((entry) => <Card entry={entry} />)}
+				</Fragment>
+			))}
+
+			<PartDivider
+				roman={GUIDE_PART.roman}
+				nameEn={GUIDE_PART.nameEn}
+				nameZh={GUIDE_PART.nameZh}
+				subEn={GUIDE_PART.subEn}
+				subZh={GUIDE_PART.subZh}
+				rangeLabel={`${guideTotal} pages`}
+			/>
+			{guide.map((entry) => <GuideCard entry={entry} total={guideTotal} />)}
+		</FlashcardsShell>
+	</body>
+</html>
