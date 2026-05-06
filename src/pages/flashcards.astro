@@ -6,13 +6,18 @@ import FlashcardsShell from "../components/FlashcardsShell.astro";
 import PartDivider from "../components/PartDivider.astro";
 import Card from "../components/Card.astro";
 import GuideCard from "../components/GuideCard.astro";
-import { PARTS, GUIDE_PART } from "../lib/parts";
+import { PARTS, GUIDE_PART, optimizeBg } from "../lib/parts";
 
 const cards = (await getCollection("cards")).sort((a, b) => a.data.num - b.data.num);
 const guide = (await getCollection("guide")).sort((a, b) =>
 	parseInt(a.data.num.slice(1), 10) - parseInt(b.data.num.slice(1), 10)
 );
 const guideTotal = guide.length;
+
+const bgByPartId: Record<string, string> = Object.fromEntries(
+	await Promise.all(PARTS.map(async (p) => [p.id, await optimizeBg(p.bgImage)]))
+);
+const guideBgUrl = await optimizeBg(GUIDE_PART.bgImage);
 
 const parts = PARTS.map((part) => {
 	const partCards = cards.filter((c) => c.data.num >= part.range[0] && c.data.num <= part.range[1]);
@@ -38,7 +43,7 @@ const parts = PARTS.map((part) => {
 						subZh={part.subZh}
 						rangeLabel={rangeLabel}
 					/>
-					{partCards.map((entry) => <Card entry={entry} />)}
+					{partCards.map((entry) => <Card entry={entry} bgUrl={bgByPartId[part.id]} />)}
 				</Fragment>
 			))}
 
@@ -50,7 +55,7 @@ const parts = PARTS.map((part) => {
 				subZh={GUIDE_PART.subZh}
 				rangeLabel={`${guideTotal} pages`}
 			/>
-			{guide.map((entry) => <GuideCard entry={entry} total={guideTotal} />)}
+			{guide.map((entry) => <GuideCard entry={entry} total={guideTotal} bgUrl={guideBgUrl} />)}
 		</FlashcardsShell>
 	</body>
 </html>

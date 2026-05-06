@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { PARTS, GUIDE_PART, partFor } from "../../lib/parts";
+import { PARTS, GUIDE_PART, partFor, optimizeBg } from "../../lib/parts";
 import CardFace from "../../components/flashcards/CardFace.astro";
 import GuideFace from "../../components/flashcards/GuideFace.astro";
 import "../../styles/flashcards-pptx.css";
@@ -25,6 +25,11 @@ for (const g of guide) {
 }
 const totalCards = "64";
 const guideTotal = guide.length;
+
+const bgByPartId: Record<string, string> = Object.fromEntries(
+	await Promise.all(PARTS.map(async (p) => [p.id, await optimizeBg(p.bgImage)]))
+);
+const guideBgUrl = await optimizeBg(GUIDE_PART.bgImage);
 ---
 <!doctype html>
 <html lang="zh-Hant">
@@ -45,7 +50,7 @@ const guideTotal = guide.length;
 		const screenLabel = `${card.num} ${card.conceptEn || card.titleEn} (${isFront ? "front" : "back"})`;
 		return (
 			<div class={`slide part-${part.id}`} data-slide-index={idx} data-screen-label={screenLabel}>
-				<div class="bg" style={`background-image:url(${part.bgImage})`}></div>
+				<div class="bg" style={`background-image:url(${bgByPartId[part.id]})`}></div>
 				<div class="overlay-grad-l"></div>
 				<div class="content">
 					<div class="left">
@@ -77,7 +82,7 @@ const guideTotal = guide.length;
 	const numSuffix = entry.num.replace(/^G/, "");
 	return (
 		<div class={`slide guide-${entry.num}`} data-slide-index={idx} data-screen-label={screenLabel}>
-			<div class="bg" style={`background-image:url(${GUIDE_PART.bgImage})`}></div>
+			<div class="bg" style={`background-image:url(${guideBgUrl})`}></div>
 			<div class="overlay-grad-l"></div>
 			<div class="content">
 				<div class="left">

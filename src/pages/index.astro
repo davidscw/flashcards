@@ -4,17 +4,20 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import { PARTS } from "../lib/parts";
+import { PARTS, optimizeBg } from "../lib/parts";
 
 const FEATURED_NUMS = [1, 19, 37, 55];
 const cards = await getCollection("cards");
+const bgByPartId: Record<string, string> = Object.fromEntries(
+	await Promise.all(PARTS.map(async (p) => [p.id, await optimizeBg(p.bgImage)]))
+);
 const featured = FEATURED_NUMS
 	.map((n) => cards.find((c) => c.data.num === n))
 	.filter((c): c is NonNullable<typeof c> => c !== undefined)
-	.map((c) => ({
-		card: c.data,
-		part: PARTS.find((p) => c.data.num >= p.range[0] && c.data.num <= p.range[1])!,
-	}));
+	.map((c) => {
+		const part = PARTS.find((p) => c.data.num >= p.range[0] && c.data.num <= p.range[1])!;
+		return { card: c.data, part, bgUrl: bgByPartId[part.id] };
+	});
 ---
 <!doctype html>
 <html lang="zh-Hant">
@@ -41,9 +44,9 @@ const featured = FEATURED_NUMS
 
 			<section class="carousel-section" aria-label="Featured cards">
 				<div class="carousel" data-carousel>
-					{featured.map(({ card, part }, i) => (
+					{featured.map(({ card, part, bgUrl }, i) => (
 						<a class={`carousel-slide part-${part.id}`} href={`/flashcards#card-${card.num}`} data-index={i}>
-							<div class="slide-bg" style={`background-image:url(${part.bgImage})`}></div>
+							<div class="slide-bg" style={`background-image:url(${bgUrl})`}></div>
 							<div class="slide-overlay"></div>
 							<div class="slide-content">
 								<div class="slide-eyebrow">{part.roman} · <span class="i18n-zh">{part.nameZh}</span><span class="i18n-en">{part.nameEn}</span></div>

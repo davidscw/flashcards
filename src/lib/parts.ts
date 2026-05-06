@@ -1,3 +1,10 @@
+import { getImage } from "astro:assets";
+import foundationsBg from "../assets/flashcards/01-foundations-print.png";
+import blossomingBg from "../assets/flashcards/02-blossoming-orchids-print.png";
+import deepeningBg from "../assets/flashcards/03-deepening-print.png";
+import offeringBg from "../assets/flashcards/04-offering-print.png";
+import guideBg from "../assets/flashcards/05-companion-guide.jpg";
+
 export type Part = {
 	id: string;
 	roman: string;
@@ -6,7 +13,7 @@ export type Part = {
 	subEn: string;
 	subZh: string;
 	range: [number, number];
-	bgImage: string;
+	bgImage: ImageMetadata;
 	overlay: number;
 };
 
@@ -19,7 +26,7 @@ export const PARTS: Part[] = [
 		subEn: "Safety and Co-Regulation",
 		subZh: "安全感與共同調節",
 		range: [1, 18],
-		bgImage: "/flashcards/images/01-foundations-print.png",
+		bgImage: foundationsBg,
 		overlay: 55,
 	},
 	{
@@ -30,7 +37,7 @@ export const PARTS: Part[] = [
 		subEn: "Navigating Intensity",
 		subZh: "面對強烈情緒",
 		range: [19, 36],
-		bgImage: "/flashcards/images/02-blossoming-orchids-print.png",
+		bgImage: blossomingBg,
 		overlay: 65,
 	},
 	{
@@ -41,7 +48,7 @@ export const PARTS: Part[] = [
 		subEn: "Self-Directed Practice",
 		subZh: "自我引導的練習",
 		range: [37, 54],
-		bgImage: "/flashcards/images/03-deepening-print.png",
+		bgImage: deepeningBg,
 		overlay: 8,
 	},
 	{
@@ -52,7 +59,7 @@ export const PARTS: Part[] = [
 		subEn: "Intergenerational Transmission",
 		subZh: "跨世代的傳承",
 		range: [55, 64],
-		bgImage: "/flashcards/images/04-offering-print.png",
+		bgImage: offeringBg,
 		overlay: 45,
 	},
 ];
@@ -67,6 +74,9 @@ export const GUIDE_PART = {
 	nameZh: "使用指南",
 	subEn: "How to walk with these cards",
 	subZh: "如何與這些卡片同行",
-	bgImage: "/flashcards/images/05-companion-guide.jpg",
+	bgImage: guideBg,
 	overlay: 60,
 } as const;
+
+export const optimizeBg = async (src: ImageMetadata) =>
+	(await getImage({ src, format: "webp", width: 2000 })).src;

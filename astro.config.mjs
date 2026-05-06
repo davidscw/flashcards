@@ -8,6 +8,9 @@ import cloudflare from "@astrojs/cloudflare";
 export default defineConfig({
 	site: "https://flashcards.davidwsc.workers.dev",
 	integrations: [sitemap()],
+	session: {
+		driver: "memory",
+	},
 	adapter: cloudflare({
 		imageService: "compile",
 		platformProxy: {

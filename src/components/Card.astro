@@ -3,8 +3,8 @@ import { partFor } from "../lib/parts";
 import type { CollectionEntry } from "astro:content";
 import CardFace from "./flashcards/CardFace.astro";
 
-type Props = { entry: CollectionEntry<"cards"> };
-const { entry } = Astro.props;
+type Props = { entry: CollectionEntry<"cards">; bgUrl: string };
+const { entry, bgUrl } = Astro.props;
 const data = entry.data;
 const part = partFor(data.num);
 const numStr = String(data.num);
@@ -13,7 +13,7 @@ const tagEn = `${part.roman} · ${part.nameEn}`;
 ---
 <article class="card-wrap" data-card-num={data.num}>
 	<div class={`card part-${part.id}`}>
-		<div class="bg" style={`background-image:url(${part.bgImage})`}></div>
+		<div class="bg" style={`background-image:url(${bgUrl})`}></div>
 		<div class="overlay-grad-l"></div>
 
 		<div class="content lang-zh">
