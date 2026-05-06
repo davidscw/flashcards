@@ -1,0 +1,25 @@
+---
+import "../styles/flashcards.css";
+---
+<!-- Blocking inline script: runs before paint, prevents FOUC. -->
+<script is:inline>
+	(function () {
+		var p = new URLSearchParams(location.search);
+		document.documentElement.setAttribute(
+			"data-lang", p.get("lang") === "en" ? "en" : "zh"
+		);
+	})();
+</script>
+
+<div class="flashcards-head">
+	<h1>身體智慧 · Body Wisdom Cards · Dr Peggy</h1>
+	<button class="lang-toggle" type="button" data-lang-toggle aria-pressed="false">English</button>
+</div>
+
+<div class="deck">
+	<slot />
+</div>
+
+<script>
+	import "../scripts/lang-toggle";
+</script>
