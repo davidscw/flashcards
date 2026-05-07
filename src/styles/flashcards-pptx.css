@@ -12,7 +12,7 @@ html,body{margin:0;padding:0;background:#0c0a08;font-family:"Schibsted Grotesk",
 .overlay-grad-l{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.78) 0%,rgba(0,0,0,.62) 38%,rgba(0,0,0,.32) 60%,rgba(0,0,0,.18) 100%)}
 .slide.part-blossoming .overlay-grad-l{background:linear-gradient(90deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.4) 38%,rgba(0,0,0,.18) 60%,rgba(0,0,0,0) 100%)}
 .content{position:absolute;left:90px;right:90px;top:90px;bottom:90px;display:grid;grid-template-columns:32% 1fr;gap:64px}
-.left{display:flex;flex-direction:column;justify-content:space-between;padding-right:48px;border-right:1px solid rgba(255,255,255,.18)}
+.left{display:flex;flex-direction:column;justify-content:space-between;padding-right:48px;border-right:1px solid rgba(255,255,255,.3)}
 .right{display:flex;flex-direction:column;gap:24px;overflow:hidden;padding-top:86px}
 .eyebrow-row{display:flex;justify-content:flex-start;align-items:center;font-family:"JetBrains Mono",monospace;font-size:22px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:64px}
 .big-num{display:block;margin:0 0 32px;font-feature-settings:"tnum","lnum"}

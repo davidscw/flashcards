@@ -97,15 +97,15 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 }
 .essay .left, .back-en .left {
 	display: flex; flex-direction: column; justify-content: space-between;
-	padding-right: 20px; border-right: 1px solid rgba(255,255,255,.18);
+	padding-right: 20px; border-right: 1px solid rgba(255,255,255,.3);
 }
 .essay .right, .back-en .right { display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
 .essay .left > div:first-child, .back-en .left > div:first-child { display: flex; flex-direction: column; }
 .essay .left .eyebrow-row, .back-en .left .eyebrow-row { margin-bottom: 12px; }
 
-.eyebrow-row { display: flex; justify-content: flex-start; align-items: center; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.7); }
-.theme-tag { display: inline-flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.9); }
-.theme-tag::before { content: ""; width: 5px; height: 5px; background: #fff; border-radius: 50%; }
+.eyebrow-row { display: flex; justify-content: flex-start; align-items: center; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 15px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+.theme-tag { display: inline-flex; align-items: center; gap: 8px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 15px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.9); }
+.theme-tag::before { content: ""; width: 6px; height: 6px; background: #fff; border-radius: 50%; }
 
 .big-num { display: block; margin: 0 0 12px; font-feature-settings: "tnum","lnum"; }
 .big-num b { font-family: "Noto Serif TC", serif; color: #fff; font-weight: 400; font-size: 52px; line-height: .9; letter-spacing: -0.03em; display: block; }
