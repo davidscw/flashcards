@@ -111,8 +111,8 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 .big-num b { font-family: "Noto Serif TC", serif; color: #fff; font-weight: 400; font-size: 52px; line-height: .9; letter-spacing: -0.03em; display: block; }
 .big-num .of { display: none; }
 
-.title-zh { font-family: "Noto Serif TC", serif; font-weight: 700; font-size: 36px; line-height: 1.18; letter-spacing: .02em; color: #fff; margin: 0 0 20px; text-wrap: balance; text-shadow: 0 1px 3px rgba(0,0,0,.35); white-space: pre-line; }
-.title-en { font-family: "Schibsted Grotesk", sans-serif; font-weight: 600; font-size: 30px; line-height: 1.08; letter-spacing: -0.02em; color: #fff; margin: 0 0 20px; text-wrap: balance; text-shadow: 0 1px 3px rgba(0,0,0,.35); }
+.title-zh { font-family: "Noto Serif TC", serif; font-weight: 700; font-size: 36px; line-height: 1.18; letter-spacing: .02em; color: #fff; margin: 0 0 20px; text-wrap: balance; white-space: pre-line; }
+.title-en { font-family: "Schibsted Grotesk", sans-serif; font-weight: 600; font-size: 30px; line-height: 1.08; letter-spacing: -0.02em; color: #fff; margin: 0 0 20px; text-wrap: balance; }
 .pull-quote { margin-top: 0; font-family: "Noto Serif TC", serif; font-size: 17px; line-height: 1.6; color: rgba(255,255,255,.9); font-weight: 400; border-left: 2px solid rgba(255,255,255,.45); padding-left: 14px; max-width: 240px; }
 .pull-quote.en { font-family: "Schibsted Grotesk", sans-serif; font-weight: 400; }
 
@@ -206,17 +206,29 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 }
 
 @media print {
-	@page { size: 8.25in 5.25in; margin: 0; }
+	/* Page size = trim (8×5) + 3mm bleed each side + 0.25in mark margin each side. */
+	@page { size: 8.75in 5.75in; margin: 0; }
 	html, body { background: #fff; }
 	.flashcards-page { padding: 0; margin: 0; background: #fff; }
-	.flashcards-head, .part-divider { display: none !important; }
+	.site-header, .flashcards-head, .part-divider { display: none !important; }
 	.deck { gap: 0; max-width: none; }
-	.card-wrap { gap: 0; page-break-after: always; break-after: page; }
+	.card-wrap {
+		display: block;
+		gap: 0;
+		width: 8.75in;
+		height: 5.75in;
+		position: relative;
+		page-break-after: always;
+		break-after: page;
+	}
 	/* Both languages visible on print, each on its own page. */
 	.lang-zh, .lang-en { display: block !important; }
 	.lang-en { page-break-before: always; break-before: page; }
 	.card {
-		box-shadow: none; border-radius: 0; width: 8.25in; height: 5.25in;
+		position: absolute;
+		top: 0.25in; left: 0.25in;
+		box-shadow: none; border-radius: 0;
+		width: 8.25in; height: 5.25in;
 		--trim-w: 8in; --trim-h: 5in; --bleed: 0.125in; --safe: 0.25in;
 		--bleed-w: 8.25in; --bleed-h: 5.25in;
 		page-break-inside: avoid;

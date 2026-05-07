@@ -59,5 +59,17 @@ const parts = PARTS.map((part) => {
 			/>
 			{guide.map((entry) => <GuideCard entry={entry} total={guideTotal} bg={guideBg} />)}
 		</FlashcardsShell>
+		<script is:inline>
+			(async function () {
+				if (new URLSearchParams(location.search).get("print") !== "1") return;
+				if (document.fonts?.ready) await document.fonts.ready;
+				const bgImgs = Array.from(document.querySelectorAll("img.bg"));
+				bgImgs.forEach((img) => { img.loading = "eager"; });
+				await Promise.all(bgImgs.map((img) => img.complete
+					? Promise.resolve()
+					: new Promise((done) => { img.onload = img.onerror = () => done(); })));
+				setTimeout(() => window.print(), 100);
+			})();
+		</script>
 	</body>
 </html>

@@ -2,63 +2,51 @@
 import { GUIDE_PART, type OptimizedBg } from "../lib/parts";
 import type { CollectionEntry } from "astro:content";
 import GuideFace from "./flashcards/GuideFace.astro";
+import CropMarks from "./CropMarks.astro";
 
 type Props = { entry: CollectionEntry<"guide">; total: number; bg: OptimizedBg };
 const { entry, total, bg } = Astro.props;
 const data = entry.data;
 const numStr = data.num.replace(/^G/i, "");
-const tagZh = GUIDE_PART.nameZh;
-const tagEn = GUIDE_PART.nameEn;
 const denseClass = data.kind === "list-dense" ? " dense" : "";
+
+const faces = [
+	{ lang: "zh" as const, face: "front" as const, tag: GUIDE_PART.nameZh, wrapClass: "essay" },
+	{ lang: "en" as const, face: "back" as const, tag: GUIDE_PART.nameEn, wrapClass: "back-en" },
+];
 ---
-<article class="card-wrap" data-guide-num={data.num}>
-	<div class={`card guide-${data.num}`}>
-		<img
-			class="bg"
-			src={bg.src}
-			width={bg.width}
-			height={bg.height}
-			alt=""
-			aria-hidden="true"
-			loading="lazy"
-			decoding="async"
-		/>
-		<div class="overlay-grad-l"></div>
-
-		<div class="content lang-zh">
-			<div class="essay">
-				<div class="left">
-					<div>
-						<div class="eyebrow-row">
-							<span class="theme-tag">{tagZh}</span>
+{faces.map(({ lang, face, tag, wrapClass }) => (
+	<article class={`card-wrap lang-${lang}`} data-guide-num={data.num}>
+		<CropMarks />
+		<div class={`card guide-${data.num}`}>
+			<img
+				class="bg"
+				src={bg.src}
+				width={bg.width}
+				height={bg.height}
+				alt=""
+				aria-hidden="true"
+				loading="lazy"
+				decoding="async"
+			/>
+			<div class="overlay-grad-l"></div>
+			<div class="content">
+				<div class={wrapClass}>
+					<div class="left">
+						<div>
+							<div class="eyebrow-row">
+								<span class="theme-tag">{tag}</span>
+							</div>
+							<div class="big-num"><b>{numStr}</b><span class="of">/{total}</span></div>
+							<GuideFace entry={data} face={face} area="left" variant="web" />
 						</div>
-						<div class="big-num"><b>{numStr}</b><span class="of">/{total}</span></div>
-						<GuideFace entry={data} face="front" area="left" variant="web" />
+						<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
 					</div>
-					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
-				</div>
-				<div class={"right" + denseClass}>
-					<GuideFace entry={data} face="front" area="right" variant="web" />
+					<div class={"right" + denseClass}>
+						<GuideFace entry={data} face={face} area="right" variant="web" />
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="content lang-en">
-			<div class="back-en">
-				<div class="left">
-					<div>
-						<div class="eyebrow-row">
-							<span class="theme-tag">{tagEn}</span>
-						</div>
-						<div class="big-num"><b>{numStr}</b><span class="of">/{total}</span></div>
-						<GuideFace entry={data} face="back" area="left" variant="web" />
-					</div>
-					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
-				</div>
-				<div class={"right" + denseClass}>
-					<GuideFace entry={data} face="back" area="right" variant="web" />
-				</div>
-			</div>
-		</div>
-	</div>
-</article>
+	</article>
+))}

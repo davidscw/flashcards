@@ -1,0 +1,58 @@
+---
+// Crop marks per HK printer spec: 5 mm long, 0.25 pt, gap 3 mm from trim
+// (gap matches the 3 mm bleed). Page is 8.75×5.75 in (630×414 pt);
+// card (bleed-inclusive) is 8.25×5.25 in centered, so trim corners sit at
+// 0.375 in (27 pt) from each page edge. Coordinates below are in PostScript
+// points (1 pt = 1/72 in) so stroke-width can be in pt directly.
+const TRIM_X1 = 27;   // 0.375 in
+const TRIM_Y1 = 27;
+const TRIM_X2 = 603;  // 8.375 in
+const TRIM_Y2 = 387;  // 5.375 in
+const BLEED_OFFSET = 9;  // 0.125 in = 3 mm
+const MARK_LEN = 14.17;  // 5 mm
+
+const corners = [
+	{ x: TRIM_X1, y: TRIM_Y1, dx: -1, dy: -1 },
+	{ x: TRIM_X2, y: TRIM_Y1, dx:  1, dy: -1 },
+	{ x: TRIM_X1, y: TRIM_Y2, dx: -1, dy:  1 },
+	{ x: TRIM_X2, y: TRIM_Y2, dx:  1, dy:  1 },
+];
+---
+<svg
+	class="crop-marks"
+	xmlns="http://www.w3.org/2000/svg"
+	viewBox="0 0 630 414"
+	preserveAspectRatio="none"
+	aria-hidden="true"
+>
+	{corners.map(({ x, y, dx, dy }) => {
+		const vInner = y + dy * BLEED_OFFSET;
+		const vOuter = vInner + dy * MARK_LEN;
+		const hInner = x + dx * BLEED_OFFSET;
+		const hOuter = hInner + dx * MARK_LEN;
+		return (
+			<>
+				<line x1={x} x2={x} y1={vInner} y2={vOuter} />
+				<line x1={hInner} x2={hOuter} y1={y} y2={y} />
+			</>
+		);
+	})}
+</svg>
+<style>
+	.crop-marks {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 8.75in;
+		height: 5.75in;
+		pointer-events: none;
+		display: none;
+	}
+	.crop-marks line {
+		stroke: #000;
+		stroke-width: 0.25;
+	}
+	@media print {
+		.crop-marks { display: block; }
+	}
+</style>

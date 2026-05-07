@@ -8,7 +8,9 @@
 		"typescript": "5.9.3"
 	},
 	"devDependencies": {
+		"pdf-lib": "^1.17.1",
 		"playwright": "^1.59.1",
+		"sharp": "^0.34.5",
 		"wrangler": "^4.87.0"
 	},
 	"engines": {

@@ -2,6 +2,7 @@
 import { partFor, type OptimizedBg } from "../lib/parts";
 import type { CollectionEntry } from "astro:content";
 import CardFace from "./flashcards/CardFace.astro";
+import CropMarks from "./CropMarks.astro";
 
 type Props = { entry: CollectionEntry<"cards">; bg: OptimizedBg; eager?: boolean };
 const { entry, bg, eager = false } = Astro.props;
@@ -10,56 +11,45 @@ const part = partFor(data.num);
 const numStr = String(data.num);
 const tagZh = `${part.roman} · ${part.nameZh}`;
 const tagEn = `${part.roman} · ${part.nameEn}`;
+
+const faces = [
+	{ lang: "zh" as const, face: "front" as const, tag: tagZh, wrapClass: "essay" },
+	{ lang: "en" as const, face: "back" as const, tag: tagEn, wrapClass: "back-en" },
+];
 ---
-<article class="card-wrap" data-card-num={data.num}>
-	<div class={`card part-${part.id}`}>
-		<img
-			class="bg"
-			src={bg.src}
-			width={bg.width}
-			height={bg.height}
-			alt=""
-			aria-hidden="true"
-			loading={eager ? "eager" : "lazy"}
-			fetchpriority={eager ? "high" : "auto"}
-			decoding="async"
-		/>
-		<div class="overlay-grad-l"></div>
-
-		<div class="content lang-zh">
-			<div class="essay">
-				<div class="left">
-					<div>
-						<div class="eyebrow-row">
-							<span class="theme-tag">{tagZh}</span>
+{faces.map(({ lang, face, tag, wrapClass }) => (
+	<article class={`card-wrap lang-${lang}`} data-card-num={data.num}>
+		<CropMarks />
+		<div class={`card part-${part.id}`}>
+			<img
+				class="bg"
+				src={bg.src}
+				width={bg.width}
+				height={bg.height}
+				alt=""
+				aria-hidden="true"
+				loading={eager && lang === "zh" ? "eager" : "lazy"}
+				fetchpriority={eager && lang === "zh" ? "high" : "auto"}
+				decoding="async"
+			/>
+			<div class="overlay-grad-l"></div>
+			<div class="content">
+				<div class={wrapClass}>
+					<div class="left">
+						<div>
+							<div class="eyebrow-row">
+								<span class="theme-tag">{tag}</span>
+							</div>
+							<div class="big-num"><b>{numStr}</b><span class="of">/64</span></div>
+							<CardFace card={data} face={face} area="left" variant="web" />
 						</div>
-						<div class="big-num"><b>{numStr}</b><span class="of">/64</span></div>
-						<CardFace card={data} face="front" area="left" variant="web" />
+						<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
 					</div>
-					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
-				</div>
-				<div class="right">
-					<CardFace card={data} face="front" area="right" variant="web" />
+					<div class="right">
+						<CardFace card={data} face={face} area="right" variant="web" />
+					</div>
 				</div>
 			</div>
 		</div>
-
-		<div class="content lang-en">
-			<div class="back-en">
-				<div class="left">
-					<div>
-						<div class="eyebrow-row">
-							<span class="theme-tag">{tagEn}</span>
-						</div>
-						<div class="big-num"><b>{numStr}</b><span class="of">/64</span></div>
-						<CardFace card={data} face="back" area="left" variant="web" />
-					</div>
-					<div class="credit-line">Dr Peggy &nbsp;·&nbsp; Hong Kong</div>
-				</div>
-				<div class="right">
-					<CardFace card={data} face="back" area="right" variant="web" />
-				</div>
-			</div>
-		</div>
-	</div>
-</article>
+	</article>
+))}
