@@ -6,7 +6,7 @@ import FlashcardsShell from "../components/FlashcardsShell.astro";
 import PartDivider from "../components/PartDivider.astro";
 import Card from "../components/Card.astro";
 import GuideCard from "../components/GuideCard.astro";
-import { PARTS, GUIDE_PART, optimizeBg } from "../lib/parts";
+import { PARTS, GUIDE_PART, optimizeBg, type OptimizedBg } from "../lib/parts";
 
 const cards = (await getCollection("cards")).sort((a, b) => a.data.num - b.data.num);
 const guide = (await getCollection("guide")).sort((a, b) =>
@@ -14,10 +14,10 @@ const guide = (await getCollection("guide")).sort((a, b) =>
 );
 const guideTotal = guide.length;
 
-const bgByPartId: Record<string, string> = Object.fromEntries(
+const bgByPartId: Record<string, OptimizedBg> = Object.fromEntries(
 	await Promise.all(PARTS.map(async (p) => [p.id, await optimizeBg(p.bgImage)]))
 );
-const guideBgUrl = await optimizeBg(GUIDE_PART.bgImage);
+const guideBg = await optimizeBg(GUIDE_PART.bgImage);
 
 const parts = PARTS.map((part) => {
 	const partCards = cards.filter((c) => c.data.num >= part.range[0] && c.data.num <= part.range[1]);
@@ -33,7 +33,7 @@ const parts = PARTS.map((part) => {
 	<body class="flashcards-page">
 		<Header />
 		<FlashcardsShell>
-			{parts.map(({ part, partCards, rangeLabel }) => (
+			{parts.map(({ part, partCards, rangeLabel }, partIdx) => (
 				<Fragment>
 					<PartDivider
 						roman={part.roman}
@@ -43,7 +43,9 @@ const parts = PARTS.map((part) => {
 						subZh={part.subZh}
 						rangeLabel={rangeLabel}
 					/>
-					{partCards.map((entry) => <Card entry={entry} bgUrl={bgByPartId[part.id]} />)}
+					{partCards.map((entry, cardIdx) => (
+						<Card entry={entry} bg={bgByPartId[part.id]} eager={partIdx === 0 && cardIdx === 0} />
+					))}
 				</Fragment>
 			))}
 
@@ -55,7 +57,7 @@ const parts = PARTS.map((part) => {
 				subZh={GUIDE_PART.subZh}
 				rangeLabel={`${guideTotal} pages`}
 			/>
-			{guide.map((entry) => <GuideCard entry={entry} total={guideTotal} bgUrl={guideBgUrl} />)}
+			{guide.map((entry) => <GuideCard entry={entry} total={guideTotal} bg={guideBg} />)}
 		</FlashcardsShell>
 	</body>
 </html>

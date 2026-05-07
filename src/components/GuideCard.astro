@@ -1,10 +1,10 @@
 ---
-import { GUIDE_PART } from "../lib/parts";
+import { GUIDE_PART, type OptimizedBg } from "../lib/parts";
 import type { CollectionEntry } from "astro:content";
 import GuideFace from "./flashcards/GuideFace.astro";
 
-type Props = { entry: CollectionEntry<"guide">; total: number; bgUrl: string };
-const { entry, total, bgUrl } = Astro.props;
+type Props = { entry: CollectionEntry<"guide">; total: number; bg: OptimizedBg };
+const { entry, total, bg } = Astro.props;
 const data = entry.data;
 const numStr = data.num.replace(/^G/i, "");
 const tagZh = GUIDE_PART.nameZh;
@@ -13,7 +13,16 @@ const denseClass = data.kind === "list-dense" ? " dense" : "";
 ---
 <article class="card-wrap" data-guide-num={data.num}>
 	<div class={`card guide-${data.num}`}>
-		<div class="bg" style={`background-image:url(${bgUrl})`}></div>
+		<img
+			class="bg"
+			src={bg.src}
+			width={bg.width}
+			height={bg.height}
+			alt=""
+			aria-hidden="true"
+			loading="lazy"
+			decoding="async"
+		/>
 		<div class="overlay-grad-l"></div>
 
 		<div class="content lang-zh">

@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { PARTS, GUIDE_PART, partFor, optimizeBg } from "../../lib/parts";
+import { PARTS, GUIDE_PART, partFor, optimizeBg, type OptimizedBg } from "../../lib/parts";
 import CardFace from "../../components/flashcards/CardFace.astro";
 import GuideFace from "../../components/flashcards/GuideFace.astro";
 import "../../styles/flashcards-pptx.css";
@@ -26,10 +26,10 @@ for (const g of guide) {
 const totalCards = "64";
 const guideTotal = guide.length;
 
-const bgByPartId: Record<string, string> = Object.fromEntries(
+const bgByPartId: Record<string, OptimizedBg> = Object.fromEntries(
 	await Promise.all(PARTS.map(async (p) => [p.id, await optimizeBg(p.bgImage)]))
 );
-const guideBgUrl = await optimizeBg(GUIDE_PART.bgImage);
+const guideBg = await optimizeBg(GUIDE_PART.bgImage);
 ---
 <!doctype html>
 <html lang="zh-Hant">
@@ -50,7 +50,16 @@ const guideBgUrl = await optimizeBg(GUIDE_PART.bgImage);
 		const screenLabel = `${card.num} ${card.conceptEn || card.titleEn} (${isFront ? "front" : "back"})`;
 		return (
 			<div class={`slide part-${part.id}`} data-slide-index={idx} data-screen-label={screenLabel}>
-				<div class="bg" style={`background-image:url(${bgByPartId[part.id]})`}></div>
+				<img
+					class="bg"
+					src={bgByPartId[part.id].src}
+					width={bgByPartId[part.id].width}
+					height={bgByPartId[part.id].height}
+					alt=""
+					aria-hidden="true"
+					loading="lazy"
+					decoding="async"
+				/>
 				<div class="overlay-grad-l"></div>
 				<div class="content">
 					<div class="left">
@@ -82,7 +91,16 @@ const guideBgUrl = await optimizeBg(GUIDE_PART.bgImage);
 	const numSuffix = entry.num.replace(/^G/, "");
 	return (
 		<div class={`slide guide-${entry.num}`} data-slide-index={idx} data-screen-label={screenLabel}>
-			<div class="bg" style={`background-image:url(${guideBgUrl})`}></div>
+			<img
+				class="bg"
+				src={guideBg.src}
+				width={guideBg.width}
+				height={guideBg.height}
+				alt=""
+				aria-hidden="true"
+				loading="lazy"
+				decoding="async"
+			/>
 			<div class="overlay-grad-l"></div>
 			<div class="content">
 				<div class="left">
@@ -121,14 +139,11 @@ const guideBgUrl = await optimizeBg(GUIDE_PART.bgImage);
 	(async function () {
 		if (new URLSearchParams(location.search).get("print") !== "1") return;
 		if (document.fonts?.ready) await document.fonts.ready;
-		const bgUrls = Array.from(document.querySelectorAll(".bg"))
-			.map((el) => getComputedStyle(el).backgroundImage.match(/url\(["']?(.+?)["']?\)/)?.[1])
-			.filter(Boolean);
-		await Promise.all(bgUrls.map((src) => new Promise((done) => {
-			const img = new Image();
-			img.onload = img.onerror = () => done();
-			img.src = src;
-		})));
+		const bgImgs = Array.from(document.querySelectorAll("img.bg"));
+		bgImgs.forEach((img) => { img.loading = "eager"; });
+		await Promise.all(bgImgs.map((img) => img.complete
+			? Promise.resolve()
+			: new Promise((done) => { img.onload = img.onerror = () => done(); })));
 		setTimeout(() => window.print(), 100);
 	})();
 </script>

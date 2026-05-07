@@ -4,11 +4,11 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import { PARTS, optimizeBg } from "../lib/parts";
+import { PARTS, optimizeBg, type OptimizedBg } from "../lib/parts";
 
 const FEATURED_NUMS = [1, 19, 37, 55];
 const cards = await getCollection("cards");
-const bgByPartId: Record<string, string> = Object.fromEntries(
+const bgByPartId: Record<string, OptimizedBg> = Object.fromEntries(
 	await Promise.all(PARTS.map(async (p) => [p.id, await optimizeBg(p.bgImage)]))
 );
 const featured = FEATURED_NUMS
@@ -16,7 +16,7 @@ const featured = FEATURED_NUMS
 	.filter((c): c is NonNullable<typeof c> => c !== undefined)
 	.map((c) => {
 		const part = PARTS.find((p) => c.data.num >= p.range[0] && c.data.num <= p.range[1])!;
-		return { card: c.data, part, bgUrl: bgByPartId[part.id] };
+		return { card: c.data, part, bg: bgByPartId[part.id] };
 	});
 ---
 <!doctype html>
@@ -44,9 +44,19 @@ const featured = FEATURED_NUMS
 
 			<section class="carousel-section" aria-label="Featured cards">
 				<div class="carousel" data-carousel>
-					{featured.map(({ card, part, bgUrl }, i) => (
+					{featured.map(({ card, part, bg }, i) => (
 						<a class={`carousel-slide part-${part.id}`} href={`/flashcards#card-${card.num}`} data-index={i}>
-							<div class="slide-bg" style={`background-image:url(${bgUrl})`}></div>
+							<img
+								class="slide-bg"
+								src={bg.src}
+								width={bg.width}
+								height={bg.height}
+								alt=""
+								aria-hidden="true"
+								loading={i === 0 ? "eager" : "lazy"}
+								fetchpriority={i === 0 ? "high" : "auto"}
+								decoding="async"
+							/>
 							<div class="slide-overlay"></div>
 							<div class="slide-content">
 								<div class="slide-eyebrow">{part.roman} · <span class="i18n-zh">{part.nameZh}</span><span class="i18n-en">{part.nameEn}</span></div>
@@ -142,7 +152,9 @@ const featured = FEATURED_NUMS
 			@media (min-width: 1080px) { .carousel-slide { flex: 0 0 calc(33.333% - 16px); } }
 			.slide-bg {
 				position: absolute; inset: 0;
-				background-size: cover; background-position: center;
+				width: 100%; height: 100%;
+				object-fit: cover; object-position: center;
+				display: block;
 				transform: scale(1.02);
 				transition: transform .6s ease;
 			}

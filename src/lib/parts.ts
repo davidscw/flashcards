@@ -78,5 +78,11 @@ export const GUIDE_PART = {
 	overlay: 60,
 } as const;
 
-export const optimizeBg = async (src: ImageMetadata) =>
-	(await getImage({ src, format: "webp", width: 2000 })).src;
+export type OptimizedBg = { src: string; width: number; height: number };
+
+export const optimizeBg = async (src: ImageMetadata): Promise<OptimizedBg> => {
+	const width = 1600;
+	const img = await getImage({ src, format: "webp", width });
+	const height = Math.round(width * (src.height / src.width));
+	return { src: img.src, width, height };
+};

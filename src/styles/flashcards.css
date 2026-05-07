@@ -56,7 +56,7 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 	background: #222; overflow: hidden; border-radius: 6px;
 	box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 30px 60px -20px rgba(0,0,0,.7), 0 8px 20px rgba(0,0,0,.45);
 }
-.card .bg { position: absolute; inset: 0; background-size: cover; background-position: center; background-repeat: no-repeat; }
+.card > .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
 .card .overlay { position: absolute; inset: 0; background: #000; }
 .card .overlay-grad-l {
 	position: absolute; inset: 0;
@@ -184,6 +184,26 @@ a.lang-toggle { text-decoration: none; display: inline-block; }
 .practice .text { font-family: "Noto Sans TC", sans-serif; font-size: 15px; line-height: 1.65; color: rgba(255,255,255,.95); font-weight: 400; }
 .practice.en .label { font-family: "Schibsted Grotesk", sans-serif; text-transform: uppercase; letter-spacing: .12em; font-size: 14px; }
 .practice.en .text { font-family: "Schibsted Grotesk", sans-serif; font-size: 15px; line-height: 1.55; }
+
+/* Mobile: scale fixed-size cards to fit narrow viewports.
+ * The card keeps its design dimensions; we scale visually and
+ * subtract the un-scaled vertical slack via negative margin. */
+@media (max-width: 840px) {
+	.flashcards-page { padding: 24px 12px 64px; }
+	.flashcards-head { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+	.part-divider { flex-wrap: wrap; gap: 10px; padding-top: 14px; margin: 16px auto 4px; }
+	.part-divider .sub { margin-left: 0; flex-basis: 100%; }
+	.deck { gap: 24px; }
+	.card-wrap {
+		--scale: calc((100vw - 24px) / var(--bleed-w));
+		width: calc(var(--bleed-w) * var(--scale));
+		height: calc(var(--bleed-h) * var(--scale));
+	}
+	.card {
+		transform: scale(var(--scale));
+		transform-origin: top left;
+	}
+}
 
 @media print {
 	@page { size: 8.25in 5.25in; margin: 0; }
