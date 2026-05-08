@@ -81,7 +81,7 @@ export const GUIDE_PART = {
 export type OptimizedBg = { src: string; width: number; height: number };
 
 export const optimizeBg = async (src: ImageMetadata): Promise<OptimizedBg> => {
-	const width = 1600;
+	const width = Math.min(3200, src.width);
 	const img = await getImage({ src, format: "webp", width });
 	const height = Math.round(width * (src.height / src.width));
 	return { src: img.src, width, height };
